@@ -102,8 +102,7 @@ class UserInfo {
             };
             //post方法
             let result = await httpRequest(options,'get');
-            console.log(result)
-            console.log(this.token)
+            console.log('token' + this.token)
             if (!result?.ecode) {
                 DoubleLog(`获取任务成功`)
                 taskList = result['data']['taskList']
