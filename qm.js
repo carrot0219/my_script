@@ -102,11 +102,10 @@ class UserInfo {
             };
             //post方法
             let result = await httpRequest(options);
-            console.log(JSON.stringify(result))
             if (!result?.ecode) {
                 DoubleLog(`获取任务成功`)
-                console.log(result['data'])
-                taskList = result['data']['taskList']
+                console.log(JSON.stringify(result['data']))
+                taskList = result['data']['data']['taskList']
                 item.forEach((item)=>{
                     if (item['status'] == -1 && item['type'] == 'playGame' && item['type'] == 'visitPage' && item['type'] == 'addApplet'){
                         name = ''
