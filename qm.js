@@ -24,7 +24,8 @@ async function main() {
             //ck未过期，开始执行任务
             // DoubleLog(`🔷账号${user.index} >> Start work`)
             console.log(`随机延迟${user.getRandomTime()}ms`);
-            taskall.push(await user.signin());
+            // taskall.push(await user.signin());
+            taskall.push(await user.taskList());
             await $.wait(user.getRandomTime());
         } else {
             //将ck过期消息存入消息数组
@@ -53,8 +54,7 @@ class UserInfo {
                 headers: {
                     "User-Agent": "Mozilla/5.0 (Linux; Android 12; Pixel 4 XL Build/SQ3A.220705.003.A1; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/107.0.5304.141 Mobile Safari/537.36 XWEB/5049 MMWEBSDK/20221206 MMWEBID/9046 MicroMessenger/8.0.32.2300(0x2800205D) WeChat/arm64 Weixin NetType/WIFI Language/zh_CN ABI/arm64 MiniProgramEnv/android",
                     "Accept-Encoding": "gzip,compress,br,deflate",
-                    "token": this.token,
-                    "Referer": "https://servicewechat.com/wxdfcaa44b1aa891a7/708/page-frame.html"
+                    "token": this.token
                 }
             };
             //post方法
@@ -65,6 +65,65 @@ class UserInfo {
             } else {
                 DoubleLog(`❌签到失败!${result?.emsg}`)
                 //console.log(result);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async finish(taskId, url){
+        const options = {
+            //签到任务调用签到接口
+            url: 'https://nmp.pureh2b.com/api/member/sign/task'+url,
+            //请求头, 所有接口通用
+            headers: {
+                "User-Agent": "Mozilla/5.0 (Linux; Android 12; Pixel 4 XL Build/SQ3A.220705.003.A1; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/107.0.5304.141 Mobile Safari/537.36 XWEB/5049 MMWEBSDK/20221206 MMWEBID/9046 MicroMessenger/8.0.32.2300(0x2800205D) WeChat/arm64 Weixin NetType/WIFI Language/zh_CN ABI/arm64 MiniProgramEnv/android",
+                "Accept-Encoding": "gzip,compress,br,deflate",
+                "token": this.token
+            },
+            body: '{"taskId":"'+taskId+'"}'
+        };
+        let result = await httpRequest(options);
+        console.log(result)
+
+    }
+
+    async taskList() {
+        try {
+            const options = {
+                //签到任务调用签到接口
+                url: `https://nmp.pureh2b.com/api/member/sign/task/get/list`,
+                //请求头, 所有接口通用
+                headers: {
+                    "User-Agent": "Mozilla/5.0 (Linux; Android 12; Pixel 4 XL Build/SQ3A.220705.003.A1; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/107.0.5304.141 Mobile Safari/537.36 XWEB/5049 MMWEBSDK/20221206 MMWEBID/9046 MicroMessenger/8.0.32.2300(0x2800205D) WeChat/arm64 Weixin NetType/WIFI Language/zh_CN ABI/arm64 MiniProgramEnv/android",
+                    "Accept-Encoding": "gzip,compress,br,deflate",
+                    "token": this.token
+                }
+            };
+            //post方法
+            let result = await httpRequest(options);
+            console.log(result)
+            if (!result?.ecode) {
+                DoubleLog(`获取任务成功`)
+                taskList = result['data']['taskList']
+                item.forEach((item)=>{
+                    if (item['status'] == -1 && item['type'] == 'playGame' && item['type'] == 'visitPage' && item['type'] == 'addApplet'){
+                        name = ''
+                        if(item['type'] == 'visitPage'){
+                            name = item['pageName']
+                        }else{
+                            name = "添加组件"
+                        }
+                        $.wait(user.getRandomTime());
+                        finish(item['id'], "/start")
+                        $.wait(user.getRandomTime());
+                        finish(item['id'], "/finish")
+                        $.wait(user.getRandomTime());
+                        finish(item['id'], "/give/reward")
+                    }
+                })
+            } else {
+                DoubleLog(`获取任务失败`)
             }
         } catch (e) {
             console.log(e);
