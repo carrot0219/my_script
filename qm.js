@@ -83,7 +83,7 @@ class UserInfo {
             },
             body: '{"taskId":"'+taskId+'"}'
         };
-        let result = await httpRequest(options);
+        let result = await httpRequest(options,'post');
         console.log(result)
 
     }
@@ -101,7 +101,7 @@ class UserInfo {
                 }
             };
             //post方法
-            let result = await httpRequest(options);
+            let result = await httpRequest(options,'get');
             console.log(result)
             if (!result?.ecode) {
                 DoubleLog(`获取任务成功`)
