@@ -105,6 +105,7 @@ class UserInfo {
             console.log(JSON.stringify(result))
             if (!result?.ecode) {
                 DoubleLog(`获取任务成功`)
+                console.log(result['data'])
                 taskList = result['data']['taskList']
                 item.forEach((item)=>{
                     if (item['status'] == -1 && item['type'] == 'playGame' && item['type'] == 'visitPage' && item['type'] == 'addApplet'){
