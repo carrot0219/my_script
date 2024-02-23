@@ -192,7 +192,7 @@ function toParams(body) {
 //检查变量
 async function checkEnv() {
     if (userCookie) {
-        // console.log(userCookie);
+        console.log(userCookie);
         let e = envSplitor[0];
         for (let o of envSplitor)
             if (userCookie.indexOf(o) > -1) {
